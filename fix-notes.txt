@@ -66,3 +66,199 @@ STILL TO DO (not changed)
     site, not the fork.
   - The live fork URL was not opened to confirm the fix. Push the changes and
     check the pages and the PDF in a browser.
+
+
+
+=============================================================================
+Update: switching the site over to Code Jam 2027  (2026-11-26)
+=============================================================================
+
+WHAT WAS ASKED
+--------------
+  1. Make the "Sponsors" link in the top bar say "Our Sponsors" on every page
+     (the home page said "Event Sponsors", the other pages said "Our Sponsors").
+  2. Add the 2026 winners to the Past Winners page, in the same style as
+     2025 and 2024, using the four award screenshots.
+  3. Change the location from Whitney High School to Cerritos High School,
+     the date to February 13th, 2027, and the countdown to February 13th,
+     2027 at 8 AM.
+  4. Change 2026 to 2027 everywhere it is needed.
+  5. Replace the Schedule and the Workshops & Presentations info with
+     "Coming Soon!".
+  6. Comment out the whole "Introducing our Sample Project Catalog!" section
+     so it is as if it was never there.
+  7. Disable the "Register Here!" button and the sign-up link by commenting
+     out their links, but keep them visible on the page.
+
+Rule used throughout: the old code was NOT deleted. Every changed line was
+kept as an HTML comment (<!-- ... -->), or a JavaScript comment (// ...) in
+the script, with the new line added next to it. To undo a change, delete the
+new line and uncomment the old one.
+
+
+QUESTIONS ASKED BEFORE EDITING (and the answers)
+------------------------------------------------
+  - The screenshots did not come through the first time. They were sent
+    again and used for the winners list.
+  - Speakers page title "Speakers for ABC CTE Code Jam 2026":
+        Answer: leave it as 2026 (the listed speakers are the 2026 ones).
+  - Home page heading "ABC CTE Code Jam 2026 Promo" (the video is the 2026
+    promo):
+        Answer: change the heading to 2027 anyway.
+  - "Register Here!" button, which is on all 5 pages:
+        Answer: disable it on all of them.
+
+
+CHANGES, FILE BY FILE
+---------------------
+
+index.html  (home page)
+  Top bar
+    - "Event Sponsors" commented out, "Our Sponsors" added.
+    - "Register Here!" button: the opening tag
+        <a class="button is-danger" href="https://forms.gle/PJcUuVmuJNiUYZ89A">
+      was commented out and replaced with
+        <a class="button is-danger">
+      The button looks the same but has no link, so clicking it does nothing.
+
+  Hero (top banner)
+    - Title "ABC CTE Code Jam 2026" commented out, "ABC CTE Code Jam 2027"
+      added.
+    - Location "Whitney High School" commented out, "Cerritos High School"
+      added.
+    - Date "February 28th, 2026" commented out, "February 13th, 2027" added.
+
+  Countdown (in the <script> at the bottom)
+    - Old line commented out:
+        // var countDownDate = new Date("February 28 2026").getTime();
+    - New line:
+        var countDownDate = new Date("2027-02-13T08:00:00-08:00").getTime();
+      "-08:00" pins the time to 8:00 AM Pacific (PST). Without it, each
+      visitor's browser would count down to 8 AM in their own time zone.
+      Checked: this equals 2027-02-13 16:00 UTC, which is 8:00 AM PST.
+
+  "Who can participate" section
+    - Heading "Who can participate in ABC CTE Code Jam 2026?" commented out,
+      2027 version added.
+    - Sign-up link
+        <a target="_blank" href="https://forms.gle/e296ErTwkeq1X8Az7">Right Here: Sign Up Form</a>
+      was commented out and replaced with
+        <a>Right Here: Sign Up Form</a>
+      The text is still visible but cannot be clicked.
+
+  Workshops & Presentations section
+    - Heading "2026 Workshops & Presentations" commented out,
+      "2027 Workshops & Presentations" added. The existing
+      "<!--Change For Later -RR -->" note was kept.
+    - "Coming Soon!" added under the heading.
+    - The three workshop entries (Justin Ji, Dr. Constance Steinkhuler,
+      Rishikesh Ingale) plus a leftover stray "</i></p>" were wrapped in one
+      comment block.
+
+  Schedule section
+    - Heading "ABC CTE Code Jam 2026 Schedule" commented out,
+      "ABC CTE Code Jam 2027 Schedule" added.
+    - "Coming Soon!" added under the heading.
+    - The whole schedule table (7:45 doors open through 8:00 lockout) and
+      the two notes under it ("All workshops are optional..." and "See our
+      speakers page...") were wrapped in one comment block.
+    - The "Event Schedule" link in the top bar still jumps to this section,
+      which now shows "Coming Soon!".
+
+  Sample Project Catalog section
+    - The entire section was wrapped in one comment block: the heading,
+      the description, the embedded 2026_Sample_Project_Handbook.pdf, the
+      "Github from Workshop" link, and the "Google Form For Submission" link.
+    - It had its own comment above it, "<!--New Sample Catalog Section RR-->".
+      HTML comments cannot be nested (the first "-->" ends the whole
+      comment), so that label was turned into plain text inside the new
+      comment block instead. Nothing from this section shows on the page.
+    - The PDF file itself was not deleted from media/.
+
+  Promo section
+    - Heading "ABC CTE Code Jam 2026 Promo" commented out,
+      "ABC CTE Code Jam 2027 Promo" added (as answered above).
+    - The video itself and its hidden title attribute ("ABC CTE Codejam
+      2026 Promo", read by screen readers) were not changed, because the
+      video is still the 2026 one.
+
+speakers.html, sponsors.html, winners.html, competition.html
+  - Each "Register Here!" button's opening tag
+        <a class="button is-danger" href="http://signup.codejam.fun">
+    was commented out and replaced with
+        <a class="button is-danger">
+    Same result as the home page: visible, not clickable.
+  - Their top bars already said "Our Sponsors", so no change was needed
+    there.
+
+winners.html  (Past Winners page)
+  - New "ABC CTE Code Jam 2026 Winners" section added above the 2025 one,
+    built from the same card markup as 2025, with the same 80px spacer
+    between years. Order matches 2025:
+
+      🏆 Best Overall        Team Anish
+                               Nolan Ream, Ethan Carter, Ramsey Beaini,
+                               Daniel Kim
+      💡 Most Creative       Team RGB
+                               Ahan Rajesh, Sarthak Badola, Andrei Giron
+      ⚡ Board's Choice      Team Anish
+                               Nolan Ream, Ethan Carter, Ramsey Beaini,
+                               Daniel Kim
+      🌟 Finalist Project    Team TRYM
+                               Tyler Lee, Rac Arcadio, Yash Grover,
+                               Millan Hamilton
+
+  - The screenshots show only "ANISH" and "TRYM" (all caps, pixel font).
+    "Team" was added in front to match how earlier years are written
+    ("Team AES", "Team Mindo"). Check the spelling and capitalization.
+
+
+DELIBERATELY NOT CHANGED
+------------------------
+  - speakers.html title "Speakers for ABC CTE Code Jam 2026" (as answered).
+  - Speaker bios and the sponsor "The Whitney High School Foundation for
+    Educational Excellence" that mention Whitney High School. They describe
+    real people and a real organization, not where the event is held.
+  - competition.html's "Submission Confirmation Form" and "AI Use Form"
+    links. They are competition submission forms, not sign-up links.
+  - The existing countdown bug: the script calls clearInterval(x) but the
+    timer is stored in "y", and the "distance < 0" branch can never run
+    because distance is clamped to 0 first. It does no harm (the countdown
+    just stops at 0), so it was left alone.
+
+
+LINE ENDINGS
+------------
+sponsors.html uses Windows (CRLF) line endings, like before. The edit
+(done with sed) stripped them again, so they were restored afterward. The
+final diff for sponsors.html is only the 3 lines for the Register button.
+
+
+HOW IT WAS CHECKED
+------------------
+  - Every comment was stripped from each page the way a browser does, and
+    the remaining (visible) text was searched. Results:
+      * No leftover "-->" or "<!--" shows up, so no comment closes early
+        and leaks code onto the page.
+      * No visible 2026 on the home page except the video's hidden title
+        attribute. The speakers page and the winners page keep their
+        intended 2026 text.
+      * No visible sign-up links (forms.gle sign-up form, signup.codejam.fun).
+      * Both "Coming Soon!" lines and the four 2026 winner cards are present.
+      * Nothing from the catalog section is visible.
+  - The countdown date was checked with Node: 2027-02-13T16:00:00.000Z.
+  - The pages were NOT opened in a browser.
+
+Diff size: competition.html 3, index.html 45, speakers.html 3,
+sponsors.html 3, winners.html 98 lines changed.
+
+These changes were not committed or pushed.
+
+
+STILL TO DO
+-----------
+  - Open the pages in a browser to check the layout, especially the home
+    page with the Schedule, Workshops and Catalog content hidden.
+  - Confirm the team names "Anish" and "TRYM" with the teams.
+  - When the 2027 schedule, workshops and sign-up form are ready,
+    uncomment the old code and update it (or replace "Coming Soon!").
