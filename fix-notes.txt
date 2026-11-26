@@ -1,0 +1,68 @@
+Fix: broken pages and PDF on the forked site
+=============================================
+
+PROBLEM
+-------
+On the fork, these did not load:
+  - The Sample Project Catalog PDF embedded on the home page
+  - The "Speakers and Judges", "Past Winners" and "Event Sponsors" pages
+
+The files themselves were fine. The PDF (media/2026_Sample_Project_Handbook.pdf)
+and the pages (speakers.html, winners.html, sponsors.html) all exist in the repo.
+
+
+CAUSE
+-----
+Every internal link started with a slash, for example:
+  href="/speakers.html"
+  src="/media/2026_Sample_Project_Handbook.pdf"
+
+A leading slash means "start from the root of the domain."
+
+  - The original site runs at the root of its own domain (codejam.fun, set in
+    the CNAME file), so "/speakers.html" worked there.
+  - The fork keeps the repo name "whitney-code-jam.github.io". GitHub Pages only
+    serves a repo at the domain root when it is named <your-username>.github.io,
+    so the fork is served one folder down:
+        https://<your-username>.github.io/whitney-code-jam.github.io/
+  - So "/speakers.html" sent the browser to
+        https://<your-username>.github.io/speakers.html
+    which skips the repo folder and returns a 404. The PDF failed the same way.
+  - Opening index.html straight from the computer broke for the same reason:
+    "/speakers.html" pointed to C:/speakers.html.
+
+
+FIX
+---
+Removed the leading "/" from all 65 internal links, so they are now relative
+(e.g. "speakers.html", "media/..."). Relative links work on the fork, on the
+original domain, and when opened locally.
+
+Files changed:
+  index.html          - nav links, speakers link, catalog PDF, favicons
+  speakers.html       - nav links, speaker images, favicons
+  winners.html        - nav links, favicons
+  sponsors.html       - nav links, sponsor logos, favicons
+  competition.html    - nav links, embedded PDFs, favicons
+  site.webmanifest    - app icon paths
+  browserconfig.xml   - tile icon path
+
+External links (https://...) and in-page links (#home, #what, etc.) were not
+touched. Protocol-relative links (//...) were left alone.
+
+sponsors.html originally used Windows (CRLF) line endings. The edit stripped
+them, so they were restored afterward. The final diff contains only the
+65 path changes.
+
+The changes were not committed or pushed.
+
+
+STILL TO DO (not changed)
+-------------------------
+  - CNAME still says "codejam.fun". If you don't own that domain, delete CNAME
+    in the fork, or GitHub Pages may try to use it and show a
+    "domain already taken" error.
+  - The navbar logo links to https://codejam.fun, so it opens the original
+    site, not the fork.
+  - The live fork URL was not opened to confirm the fix. Push the changes and
+    check the pages and the PDF in a browser.
